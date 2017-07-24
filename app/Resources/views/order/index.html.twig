@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Orders list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Customer_email</th>
+                <th>Amount</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td><a href="{{ path('order_show', { 'id': order.id }) }}">{{ order.id }}</a></td>
+                <td>{{ order.customeremail }}</td>
+                <td>{{ order.amount }}</td>
+                <td>{% if order.created %}{{ order.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('order_show', { 'id': order.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('order_edit', { 'id': order.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('order_new') }}">Create a new order</a>
+        </li>
+    </ul>
+{% endblock %}
