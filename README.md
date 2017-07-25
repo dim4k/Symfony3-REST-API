@@ -90,3 +90,9 @@ docker-compose exec php bash
 # Launch tests
 php vendor/phpunit/phpunit/phpunit
 ```
+
+TODO
+----
+
+* Add PUT methods
+* Add JSON web token to secure the API
