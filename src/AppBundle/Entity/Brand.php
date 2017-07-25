@@ -111,5 +111,15 @@ class Brand
 	{
 		return $this->products;
 	}
+
+	/**
+	 * Has products
+	 *
+	 * @return boolean
+	 */
+	public function hasProducts()
+	{
+		return $this->products != null;
+	}
 }
 

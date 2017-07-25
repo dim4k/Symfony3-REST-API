@@ -77,7 +77,14 @@ class BrandController extends Controller
 		$brand = $em->getRepository('AppBundle:Brand')
 			->find($request->get('id'));
 
-		/* @var $place Brand */
+		/* @var $brand Brand */
+		if (empty($brand)) {
+			return new JsonResponse(['message' => 'Brand not found'], Response::HTTP_NOT_FOUND);
+		}
+
+		if(!$brand->getProducts()->isEmpty()){
+			return new JsonResponse(['message' => 'Cannot remove Brand, products are attach to it'], Response::HTTP_FORBIDDEN);
+		}
 		$em->remove($brand);
 		$em->flush();
 	}
