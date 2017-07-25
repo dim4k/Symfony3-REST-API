@@ -47,7 +47,7 @@ composer install
 sf3 doctrine:database:create
 sf3 doctrine:schema:update --force
 
-# Load data fixtures
+# Load fixtures
 sf3 doctrine:fixtures:load
 
 # Exit Docker bash commands
