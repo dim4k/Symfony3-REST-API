@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Brand;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use AppBundle\Form\Type\ProductType;
 
 /**
  *
@@ -58,6 +60,7 @@ class ProductController extends Controller
 	public function postProductsAction(Request $request)
 	{
 		$product = new Product();
+		$form = $this->createForm(ProductType::class, $product);
 		$product->setName($request->get('name'));
 		$product->setPrice($request->get('price'));
 
@@ -65,15 +68,23 @@ class ProductController extends Controller
 			->getRepository('AppBundle:Brand')
 			->findOneBy($request->get('brand'));
 
+		/* @var $brand Brand */
 		if (empty($brand)) {
 			return new JsonResponse(['message' => 'Brand not found'], Response::HTTP_NOT_FOUND);
 		}
-
 		$product->setBrand($brand);
 
-		$em = $this->get('doctrine.orm.entity_manager');
-		$em->persist($product);
-		$em->flush();
+		$request->request->set('brand',$brand);
+
+		$form->submit($request->request->all());
+
+		if($form->isValid()) {
+			$em = $this->get('doctrine.orm.entity_manager');
+			$em->persist($product);
+			$em->flush();
+		}else{
+			return $form;
+		}
 
 		return $product;
 	}

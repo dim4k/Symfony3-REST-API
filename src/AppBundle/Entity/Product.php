@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Product
@@ -38,6 +39,10 @@ class Product
      * @var float
      *
      * @ORM\Column(name="price", type="float")
+	 * @Assert\Range(
+	 *      min = 0,
+	 *      minMessage = "Price must be at least {{ limit }}",
+	 * )
      */
     private $price;
 
