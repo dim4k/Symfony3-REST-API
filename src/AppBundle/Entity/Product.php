@@ -31,13 +31,15 @@ class Product
     /**
      * @var string
      *
+	 * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var float
-     *
+	 *
+     * @Assert\NotBlank()
      * @ORM\Column(name="price", type="float")
 	 * @Assert\Range(
 	 *      min = 0,
