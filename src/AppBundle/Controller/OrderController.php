@@ -114,7 +114,11 @@ class OrderController extends Controller
 		$order = $em->getRepository('AppBundle:Order')
 			->find($request->get('id'));
 
-		/* @var $place Order */
+		/* @var $order Order */
+		if (empty($order)) {
+			return new JsonResponse(['message' => 'Brand not found'], Response::HTTP_NOT_FOUND);
+		}
+
 		$em->remove($order);
 		$em->flush();
 	}

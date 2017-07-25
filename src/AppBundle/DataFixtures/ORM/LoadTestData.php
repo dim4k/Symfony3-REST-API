@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Brand;
+use AppBundle\Entity\Order;
 
 class LoadTestData implements FixtureInterface
 {
@@ -61,11 +62,11 @@ class LoadTestData implements FixtureInterface
 		$product->setPrice('399');
 		$manager->persist($product);
 
-		$product = new Product();
-		$product->setName('Iphone 7+');
-		$product->setBrand($brand);
-		$product->setPrice('899');
-		$manager->persist($product);
+		$product2 = new Product();
+		$product2->setName('Iphone 7+');
+		$product2->setBrand($brand);
+		$product2->setPrice('899');
+		$manager->persist($product2);
 
 		$brand = new Brand();
 		$brand->setName('Samsung');
@@ -93,11 +94,11 @@ class LoadTestData implements FixtureInterface
 		$brand->setName('Nokia');
 		$manager->persist($brand);
 
-		$product = new Product();
-		$product->setName('3210');
-		$product->setBrand($brand);
-		$product->setPrice('29');
-		$manager->persist($product);
+		$product3 = new Product();
+		$product3->setName('3210');
+		$product3->setBrand($brand);
+		$product3->setPrice('29');
+		$manager->persist($product3);
 
 		$product = new Product();
 		$product->setName('3410');
@@ -108,6 +109,19 @@ class LoadTestData implements FixtureInterface
 		$brand = new Brand();
 		$brand->setName('Sony');
 		$manager->persist($brand);
+
+		$order = new Order();
+		$order->setAmount(938);
+		$order->setCustomerEmail('test@testmail.com');
+		$order->addMobile($product);
+		$order->addMobile($product2);
+		$manager->persist($order);
+
+		$order = new Order();
+		$order->setAmount(29);
+		$order->setCustomerEmail('test2@testmail.com');
+		$order->addMobile($product3);
+		$manager->persist($order);
 
 		$manager->flush();
 	}

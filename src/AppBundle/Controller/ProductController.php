@@ -64,6 +64,10 @@ class ProductController extends Controller
 		$product->setName($request->get('name'));
 		$product->setPrice($request->get('price'));
 
+		if(empty($request->get('brand'))){
+			return new JsonResponse(['message' => 'Product has no brand'], Response::HTTP_BAD_REQUEST);
+		}
+
 		$brand = $this->get('doctrine.orm.entity_manager')
 			->getRepository('AppBundle:Brand')
 			->findOneBy($request->get('brand'));
@@ -99,7 +103,7 @@ class ProductController extends Controller
 		$product = $em->getRepository('AppBundle:Product')
 			->find($request->get('id'));
 
-		/* @var $place Product */
+		/* @var $product Product */
 		if (empty($product)) {
 			return new JsonResponse(['message' => 'Brand not found'], Response::HTTP_NOT_FOUND);
 		}
