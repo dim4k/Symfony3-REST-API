@@ -100,6 +100,10 @@ class ProductController extends Controller
 			->find($request->get('id'));
 
 		/* @var $place Product */
+		if (empty($product)) {
+			return new JsonResponse(['message' => 'Brand not found'], Response::HTTP_NOT_FOUND);
+		}
+
 		$em->remove($product);
 		$em->flush();
 	}

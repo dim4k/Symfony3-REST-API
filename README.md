@@ -88,7 +88,7 @@ cd docker-symfony
 docker-compose exec php bash
 
 # Launch tests
-php vendor/phpunit/phpunit/phpunit
+./vendor/bin/phpunit
 ```
 
 TODO

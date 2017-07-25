@@ -15,7 +15,7 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class BrandControllerTest extends WebTestCase
+class ProductControllerTest extends WebTestCase
 {
 
 	private $application;
@@ -67,11 +67,11 @@ class BrandControllerTest extends WebTestCase
 		$fixture->load($entityManager);
 	}
 
-    public function testGetBrands()
+	public function testGetProducts()
 	{
 		// Create a new client to browse the application
 		$client = static::createClient();
-		$client->request('GET', '/brands');
+		$client->request('GET', '/products');
 
 		$response = $client->getResponse();
 
@@ -81,15 +81,15 @@ class BrandControllerTest extends WebTestCase
 		$this->assertSame('application/json', $response->headers->get('Content-Type'),'Unexpected content type response');
 		// Test response content fetch json format and test data
 		$this->assertJsonStringEqualsJsonString($client->getResponse()->getContent(),
-			'[{"id":2,"name":"Apple","products":[{"id":5,"name":"Iphone","price":99},{"id":6,"name":"Iphone 2","price":99},{"id":7,"name":"Iphone 6s","price":399},{"id":8,"name":"Iphone 7+","price":899}]},{"id":4,"name":"Nokia","products":[{"id":12,"name":"3210","price":29},{"id":13,"name":"3410","price":39}]},{"id":1,"name":"Oneplus","products":[{"id":1,"name":"Oneplus 1","price":99},{"id":2,"name":"Oneplus 2","price":299},{"id":3,"name":"Oneplus 3","price":399},{"id":4,"name":"Oneplus 5","price":499}]},{"id":3,"name":"Samsung","products":[{"id":9,"name":"Galaxy S2","price":99},{"id":10,"name":"Galaxy S5","price":299},{"id":11,"name":"Galaxy S7","price":799}]},{"id":5,"name":"Sony","products":[]}]',
+			'[{"id":1,"name":"Oneplus 1","brand":{"id":1,"name":"Oneplus"},"price":99},{"id":2,"name":"Oneplus 2","brand":{"id":1,"name":"Oneplus"},"price":299},{"id":3,"name":"Oneplus 3","brand":{"id":1,"name":"Oneplus"},"price":399},{"id":4,"name":"Oneplus 5","brand":{"id":1,"name":"Oneplus"},"price":499},{"id":5,"name":"Iphone","brand":{"id":2,"name":"Apple"},"price":99},{"id":6,"name":"Iphone 2","brand":{"id":2,"name":"Apple"},"price":99},{"id":7,"name":"Iphone 6s","brand":{"id":2,"name":"Apple"},"price":399},{"id":8,"name":"Iphone 7+","brand":{"id":2,"name":"Apple"},"price":899},{"id":9,"name":"Galaxy S2","brand":{"id":3,"name":"Samsung"},"price":99},{"id":10,"name":"Galaxy S5","brand":{"id":3,"name":"Samsung"},"price":299},{"id":11,"name":"Galaxy S7","brand":{"id":3,"name":"Samsung"},"price":799},{"id":12,"name":"3210","brand":{"id":4,"name":"Nokia"},"price":29},{"id":13,"name":"3410","brand":{"id":4,"name":"Nokia"},"price":39}]',
 			'Unexpected Json response');
 	}
 
-	public function testGetBrandById()
+	public function testGetProductById()
 	{
 		// Create a new client to browse the application
 		$client = static::createClient();
-		$client->request('GET', '/brands/1');
+		$client->request('GET', '/products/1');
 
 		$response = $client->getResponse();
 
@@ -99,21 +99,21 @@ class BrandControllerTest extends WebTestCase
 		$this->assertSame('application/json', $response->headers->get('Content-Type'),'Unexpected content type response');
 		// Test response content fetch json format and test data
 		$this->assertJsonStringEqualsJsonString($client->getResponse()->getContent(),
-			'{"id":1,"name":"Oneplus","products":[{"id":1,"name":"Oneplus 1","price":99},{"id":2,"name":"Oneplus 2","price":299},{"id":3,"name":"Oneplus 3","price":399},{"id":4,"name":"Oneplus 5","price":499}]}',
+			'{"id":1,"name":"Oneplus 1","brand":{"id":1,"name":"Oneplus"},"price":99}',
 			'Unexpected Json response');
 	}
 
-	public function testPostBrand()
+	public function testPostProduct()
 	{
 		// Create a new client to browse the application
 		$client = static::createClient();
 		$client->request(
 			'POST',
-			'/brands',
+			'/products',
 			array(),
 			array(),
 			array('CONTENT_TYPE' => 'application/json'),
-			'{"name":"Huawei"}'
+			'{"name":"Iphone 15", "price":"49.9", "brand":{"name":"Apple"}}'
 		);
 
 		$response = $client->getResponse();
@@ -121,32 +121,44 @@ class BrandControllerTest extends WebTestCase
 		$this->assertSame(201, $client->getResponse()->getStatusCode(),'Unexpected status code response ');
 
 		$client = static::createClient();
-		$client->request('GET', '/brands/6');
+		$client->request('GET', '/products/14');
 		// Test if response is OK
 		$this->assertSame(200, $client->getResponse()->getStatusCode(),'Unexpected status code response ');
 		// Test if Content-Type is valid application/json
 		$this->assertSame('application/json', $response->headers->get('Content-Type'),'Unexpected content type response');
 		// Test response content fetch json format and test data
 		$this->assertJsonStringEqualsJsonString($client->getResponse()->getContent(),
-			'{"id":6,"name":"Huawei","products":[]}',
+			'{"id":14,"name":"Iphone 15","brand":{"id":2,"name":"Apple"},"price":49.9}',
 			'Unexpected Json response');
 	}
 
-	public function testRemoveBrand()
+	public function testRemoveProduct()
 	{
 		// Create a new client to browse the application
 		$client = static::createClient();
-		$client->request('DELETE', '/brands/5');
+		$client->request('DELETE', '/products/13');
 
 		// Test if response is OK
 		$this->assertSame(204, $client->getResponse()->getStatusCode(),'Unexpected status code response ');
+
+		// We also need to check that product is remove from brand
+		$client = static::createClient();
+		$client->request('GET', '/brands/4');
+		// Test if response is OK
+		$this->assertSame(200, $client->getResponse()->getStatusCode(),'Unexpected status code response ');
+		// Test if Content-Type is valid application/json
+		$this->assertSame('application/json', $client->getResponse()->headers->get('Content-Type'),'Unexpected content type response');
+		// Test response content fetch json format and test data
+		$this->assertJsonStringEqualsJsonString($client->getResponse()->getContent(),
+			'{"id":4,"name":"Nokia","products":[{"id":12,"name":"3210","price":29}]}',
+			'Unexpected Json response');
 	}
 
-	public function testFailRemoveBrand()
+	public function testFailRemoveProduct()
 	{
 		// Create a new client to browse the application
 		$client = static::createClient();
-		$client->request('DELETE', '/brands/10');
+		$client->request('DELETE', '/products/20');
 
 		// Test if response is OK
 		$this->assertSame(404, $client->getResponse()->getStatusCode(),'Unexpected status code response');
