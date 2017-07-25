@@ -58,3 +58,35 @@ exit
 ```sh
 docker network inspect bridge | grep Gateway
 ```
+
+Access the API
+----
+
+Use a Rest client or simply use Curl to access the API
+
+* GET : /brands
+* POST : /brands
+* GET : /brands/&lt;id&gt;
+* DELETE : /brands/&lt;id&gt;
+* GET : /products
+* POST : /products
+* GET : /products/&lt;id&gt;
+* DELETE : /products/&lt;id&gt;
+* GET : /orders
+* POST : /orders
+* GET : /orders/&lt;id&gt;
+* DELETE : /orders/&lt;id&gt;
+
+Test the app
+----
+
+```sh
+# Go to Docker folder
+cd docker-symfony
+
+# Enter Docker bash commands
+docker-compose exec php bash
+
+# Launch tests
+php vendor/phpunit/phpunit/phpunit
+```
