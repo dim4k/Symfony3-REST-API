@@ -66,4 +66,19 @@ class BrandController extends Controller
 
 		return $brand;
 	}
+
+	/**
+	 * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+	 * @Rest\Delete("/brands/{id}")
+	 */
+	public function removeBrandAction(Request $request)
+	{
+		$em = $this->get('doctrine.orm.entity_manager');
+		$brand = $em->getRepository('AppBundle:Brand')
+			->find($request->get('id'));
+
+		/* @var $place Brand */
+		$em->remove($brand);
+		$em->flush();
+	}
 }

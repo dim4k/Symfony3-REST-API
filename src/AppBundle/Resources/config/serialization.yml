@@ -17,3 +17,16 @@ AppBundle\Entity\Product:
             groups: ['product']
         price:
             groups: ['brand', 'product']
+
+AppBundle\Entity\Order:
+    attributes:
+        id:
+            groups: ['order', 'product']
+        mobiles:
+            groups: ['order', 'product']
+        customer_email:
+            groups: ['order', 'product']
+        amount:
+            groups: ['order', 'product']
+        created:
+            groups: ['order', 'product']

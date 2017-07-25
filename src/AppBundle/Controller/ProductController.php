@@ -65,6 +65,10 @@ class ProductController extends Controller
 			->getRepository('AppBundle:Brand')
 			->findOneBy($request->get('brand'));
 
+		if (empty($brand)) {
+			return new JsonResponse(['message' => 'Brand not found'], Response::HTTP_NOT_FOUND);
+		}
+
 		$product->setBrand($brand);
 
 		$em = $this->get('doctrine.orm.entity_manager');

@@ -29,18 +29,7 @@ class OrderController extends Controller
 			->findAll();
 
 		/* @var $orders Order[] */
-		$formatted = [];
-		foreach ($orders as $order) {
-			$formatted[] = [
-				'id' => $order->getId(),
-				'brand' => $order->getMobiles(),
-				'name' => $order->getCustomer_email(),
-				'price' => $order->getAmount(),
-				'created' => $order->getCreated(),
-			];
-		}
-
-		return new JsonResponse($formatted);
+		return $orders;
 	}
 
 	/**
@@ -53,19 +42,7 @@ class OrderController extends Controller
 			->find($request->get('id'));
 
 		/* @var $order Order */
-		if (empty($order)) {
-			return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
-		}
-
-		$formatted[] = [
-			'id' => $order->getId(),
-			'brand' => $order->getMobiles(),
-			'name' => $order->getCustomer_email(),
-			'price' => $order->getAmount(),
-			'created' => $order->getCreated(),
-		];
-
-		return new JsonResponse($formatted);
+		return $order;
 	}
 
 	/**
@@ -78,24 +55,37 @@ class OrderController extends Controller
 		$order = new Order();
 		$order->setCustomer_email($request->get('customer_email'));
 
-		$product = $this->get('doctrine.orm.entity_manager')
-			->getRepository('AppBundle:Product')
-			->find($request->get('product'));
+		foreach($request->get('mobiles') as $mobile) {
+			$product = $this->get('doctrine.orm.entity_manager')
+				->getRepository('AppBundle:Brand')
+				->findOneBy($mobile);
 
-		$order->addMobile($product);
+			if (empty($product)) {
+				return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
+			}
+
+			$order->addMobile($product);
+		}
 
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->persist($order);
 		$em->flush();
 
-		$formatted[] = [
-			'id' => $order->getId(),
-			'brand' => $order->getMobiles(),
-			'name' => $order->getCustomer_email(),
-			'price' => $order->getAmount(),
-			'created' => $order->getCreated(),
-		];
+		return $order;
+	}
 
-		return $formatted;
+	/**
+	 * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+	 * @Rest\Delete("/orders/{id}")
+	 */
+	public function removeOrderAction(Request $request)
+	{
+		$em = $this->get('doctrine.orm.entity_manager');
+		$order = $em->getRepository('AppBundle:Order')
+			->find($request->get('id'));
+
+		/* @var $place Order */
+		$em->remove($order);
+		$em->flush();
 	}
 }
