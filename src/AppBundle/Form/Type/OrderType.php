@@ -12,10 +12,8 @@ class OrderType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder->add('name');
 		$builder->add('customer_email');
-		$builder->add('price');
-		$builder->add('brand', TextType::class);
+		$builder->add('mobiles', TextType::class);
 	}
 
 	public function configureOptions(OptionsResolver $resolver)

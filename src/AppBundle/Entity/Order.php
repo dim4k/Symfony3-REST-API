@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Order
@@ -23,6 +24,7 @@ class Order
 	private $id;
 
 	/**
+	 * @Assert\NotBlank()
 	 * @ORM\ManyToMany(targetEntity="Product", cascade={"persist"})
 	 */
 	private $mobiles;
@@ -30,6 +32,10 @@ class Order
 	/**
 	 * @var string
 	 *
+	 * @Assert\Email(
+	 *     message = "The email '{{ value }}' is not a valid email.",
+	 *     checkMX = true
+	 * )
 	 * @ORM\Column(name="customer_email", type="string", length=255)
 	 */
 	private $customer_email;

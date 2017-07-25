@@ -57,26 +57,45 @@ class OrderController extends Controller
 	{
 		// Created date is generate during entity construct
 		$order = new Order();
+		$form = $this->createForm(OrderType::class, $order);
 		$order->setCustomerEmail($request->get('customer_email'));
 
 		$amount = 0;
-		foreach($request->get('mobiles') as $mobile) {
-			$product = $this->get('doctrine.orm.entity_manager')
-				->getRepository('AppBundle:Product')
-				->findOneBy($mobile);
+		$mobiles = [];
 
-			/* @var $product Product */
-			if (empty($product)) {
-				return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
+		if(is_array($request->get('mobiles'))) {
+			if(empty($request->get('mobiles'))){
+				return new JsonResponse(['message' => 'Mobiles is empty you must set at least 1 mobile in your order'], Response::HTTP_BAD_REQUEST);
 			}
-			$amount += $product->getPrice();
-			$order->addMobile($product);
-		}
+			foreach ($request->get('mobiles') as $mobile) {
+				$product = $this->get('doctrine.orm.entity_manager')
+					->getRepository('AppBundle:Product')
+					->findOneBy($mobile);
 
+				/* @var $product Product */
+				if (empty($product)) {
+					return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
+				}
+				$amount += $product->getPrice();
+				$order->addMobile($product);
+
+				$mobiles[] = $product;
+			}
+		}else{
+			return new JsonResponse(['message' => 'Mobiles is not correctly formatted'], Response::HTTP_BAD_REQUEST);
+		}
 		$order->setAmount($amount);
-		$em = $this->get('doctrine.orm.entity_manager');
-		$em->persist($order);
-		$em->flush();
+
+		$request->request->set('mobiles',$mobiles);
+		$form->submit($request->request->all());
+
+		if($form->isValid()) {
+			$em = $this->get('doctrine.orm.entity_manager');
+			$em->persist($order);
+			$em->flush();
+		}else{
+			return $form;
+		}
 
 		return $order;
 	}
