@@ -77,4 +77,19 @@ class ProductController extends Controller
 
 		return $product;
 	}
+
+	/**
+	 * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+	 * @Rest\Delete("/products/{id}")
+	 */
+	public function removeProductAction(Request $request)
+	{
+		$em = $this->get('doctrine.orm.entity_manager');
+		$product = $em->getRepository('AppBundle:Product')
+			->find($request->get('id'));
+
+		/* @var $place Product */
+		$em->remove($product);
+		$em->flush();
+	}
 }
