@@ -40,7 +40,7 @@ docker-compose up -d
 # Enter Docker bash commands
 docker-compose exec php bash
 
-# Install Composer dependencies, if you're usinge Docker just use default database settings
+# Install Composer dependencies, if you're using Docker just use default database settings
 composer install
 
 # Create database
