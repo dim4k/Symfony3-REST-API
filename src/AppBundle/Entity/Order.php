@@ -127,7 +127,7 @@ class Order
 	 *
 	 * @return float
 	 */
-	public function getLatitude()
+	public function getAmount()
 	{
 		return $this->amount;
 	}
@@ -139,7 +139,7 @@ class Order
 	 *
 	 * @return Order
 	 */
-	public function setCreationDate($created)
+	public function setCreated($created)
 	{
 		$this->created = $created;
 
@@ -151,7 +151,7 @@ class Order
 	 *
 	 * @return \DateTime
 	 */
-	public function getCreationDate()
+	public function getCreated()
 	{
 		return $this->created;
 	}

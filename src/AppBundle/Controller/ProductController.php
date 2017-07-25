@@ -20,6 +20,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class ProductController extends Controller
 {
 	/**
+	 * @Rest\View(serializerGroups={"product"})
 	 * @Get("/products")
 	 */
 	public function getProductsAction(Request $request)
@@ -33,7 +34,7 @@ class ProductController extends Controller
 		foreach ($products as $product) {
 			$formatted[] = [
 				'id' => $product->getId(),
-				'brand' => $product->getBrand()->__toString(),
+				'brand' => $product->getBrand(),
 				'name' => $product->getName(),
 				'price' => $product->getPrice()
 			];
@@ -43,9 +44,10 @@ class ProductController extends Controller
 	}
 
 	/**
+	 * @Rest\View(serializerGroups={"product"})
 	 * @Get("/products/{id}")
 	 */
-	public function getBrandAction(Request $request)
+	public function getProductAction(Request $request)
 	{
 		$product = $this->get('doctrine.orm.entity_manager')
 			->getRepository('AppBundle:Product')
@@ -58,7 +60,7 @@ class ProductController extends Controller
 
 		$formatted[] = [
 			'id' => $product->getId(),
-			'brand' => $product->getBrand()->__toString(),
+			'brand' => $product->getBrand(),
 			'name' => $product->getName(),
 			'price' => $product->getPrice()
 		];
@@ -67,10 +69,10 @@ class ProductController extends Controller
 	}
 
 	/**
-	 * @Rest\View(statusCode=Response::HTTP_CREATED)
+	 * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"product"})
 	 * @Rest\Post("/products")
 	 */
-	public function postBrandsAction(Request $request)
+	public function postProductsAction(Request $request)
 	{
 		$product = new Product();
 		$product->setName($request->get('name'));
@@ -78,7 +80,7 @@ class ProductController extends Controller
 
 		$brand = $this->get('doctrine.orm.entity_manager')
 			->getRepository('AppBundle:Brand')
-			->find($request->get('brand'));
+			->findOneBy($request->get('brand'));
 
 		$product->setBrand($brand);
 
@@ -88,7 +90,7 @@ class ProductController extends Controller
 
 		$formatted = [
 			'id' => $product->getId(),
-			'brand' => $product->getBrand()->__toString(),
+			'brand' => $product->getBrand(),
 			'name' => $product->getName(),
 			'price' => $product->getPrice()
 		];

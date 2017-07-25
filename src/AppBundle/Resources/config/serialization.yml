@@ -1,0 +1,19 @@
+AppBundle\Entity\Brand:
+    attributes:
+        id:
+            groups: ['brand', 'product']
+        name:
+            groups: ['brand', 'product']
+        products:
+            groups: ['brand']
+
+AppBundle\Entity\Product:
+    attributes:
+        id:
+            groups: ['brand', 'product']
+        name:
+            groups: ['brand', 'product']
+        brand:
+            groups: ['brand', 'product']
+        price:
+            groups: ['brand', 'product']
