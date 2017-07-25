@@ -10,13 +10,13 @@ AppBundle\Entity\Brand:
 AppBundle\Entity\Product:
     attributes:
         id:
-            groups: ['brand', 'product']
+            groups: ['brand', 'product','order']
         name:
-            groups: ['brand', 'product']
+            groups: ['brand', 'product','order']
         brand:
             groups: ['product']
         price:
-            groups: ['brand', 'product']
+            groups: ['brand', 'product','order']
 
 AppBundle\Entity\Order:
     attributes:

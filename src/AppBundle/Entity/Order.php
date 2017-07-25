@@ -55,7 +55,7 @@ class Order
 	}
 
 	public function __toString() {
-		return $this->getCustomer_email();
+		return $this->getCustomerEmail();
 	}
 
 	/**
@@ -85,13 +85,13 @@ class Order
 	}
 
 	/**
-	 * Set setCustomer_email
+	 * Set setCustomerEmail
 	 *
 	 * @param string $customer_email
 	 *
 	 * @return Order
 	 */
-	public function setCustomer_email($customer_email)
+	public function setCustomerEmail($customer_email)
 	{
 		$this->customer_email = $customer_email;
 
@@ -99,11 +99,11 @@ class Order
 	}
 
 	/**
-	 * Get getCustomer_email
+	 * Get getCustomerEmail
 	 *
 	 * @return string
 	 */
-	public function getCustomer_email()
+	public function getCustomerEmail()
 	{
 		return $this->customer_email;
 	}
