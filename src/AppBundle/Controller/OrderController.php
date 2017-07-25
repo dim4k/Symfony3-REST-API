@@ -46,6 +46,10 @@ class OrderController extends Controller
 			->find($request->get('id'));
 
 		/* @var $order Order */
+		if (empty($order)) {
+			return new JsonResponse(['message' => 'Order not found'], Response::HTTP_NOT_FOUND);
+		}
+
 		return $order;
 	}
 
