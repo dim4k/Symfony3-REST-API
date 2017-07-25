@@ -20,6 +20,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class BrandController extends Controller
 {
 	/**
+	 * @Rest\View(serializerGroups={"brand"})
 	 * @Get("/brands")
 	 */
 	public function getBrandsAction(Request $request)
@@ -29,18 +30,11 @@ class BrandController extends Controller
 			->findAll();
 
 		/* @var $brands Brand[] */
-		$formatted = [];
-		foreach ($brands as $brand) {
-			$formatted[] = [
-				'id' => $brand->getId(),
-				'name' => $brand->getName(),
-			];
-		}
-
-		return new JsonResponse($formatted);
+		return $brands;
 	}
 
 	/**
+	 * @Rest\View(serializerGroups={"brand"})
 	 * @Get("/brands/{id}")
 	 */
 	public function getBrandAction(Request $request)
@@ -54,16 +48,11 @@ class BrandController extends Controller
 			return new JsonResponse(['message' => 'Brand not found'], Response::HTTP_NOT_FOUND);
 		}
 
-		$formatted = [
-			'id' => $brand->getId(),
-			'name' => $brand->getName(),
-		];
-
-		return new JsonResponse($formatted);
+		return $brand;
 	}
 
 	/**
-	 * @Rest\View(statusCode=Response::HTTP_CREATED)
+	 * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"brand"})
 	 * @Rest\Post("/brands")
 	 */
 	public function postBrandsAction(Request $request)
@@ -75,11 +64,6 @@ class BrandController extends Controller
 		$em->persist($brand);
 		$em->flush();
 
-		$formatted = [
-			'id' => $brand->getId(),
-			'name' => $brand->getName(),
-		];
-
-		return $formatted;
+		return $brand;
 	}
 }

@@ -30,17 +30,7 @@ class ProductController extends Controller
 			->findAll();
 
 		/* @var $products Product[] */
-		$formatted = [];
-		foreach ($products as $product) {
-			$formatted[] = [
-				'id' => $product->getId(),
-				'brand' => $product->getBrand(),
-				'name' => $product->getName(),
-				'price' => $product->getPrice()
-			];
-		}
-
-		return new JsonResponse($formatted);
+		return $products;
 	}
 
 	/**
@@ -58,14 +48,7 @@ class ProductController extends Controller
 			return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
 		}
 
-		$formatted[] = [
-			'id' => $product->getId(),
-			'brand' => $product->getBrand(),
-			'name' => $product->getName(),
-			'price' => $product->getPrice()
-		];
-
-		return new JsonResponse($formatted);
+		return $product;
 	}
 
 	/**
@@ -88,13 +71,6 @@ class ProductController extends Controller
 		$em->persist($product);
 		$em->flush();
 
-		$formatted = [
-			'id' => $product->getId(),
-			'brand' => $product->getBrand(),
-			'name' => $product->getName(),
-			'price' => $product->getPrice()
-		];
-
-		return $formatted;
+		return $product;
 	}
 }
