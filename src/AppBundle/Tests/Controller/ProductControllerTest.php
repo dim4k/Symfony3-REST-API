@@ -2,7 +2,6 @@
 
 namespace AppBundle\Tests\Controller;
 
-use AppBundle\DataFixtures\ORM\LoadProductData;
 use AppBundle\DataFixtures\ORM\LoadTestData;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -158,7 +157,7 @@ class ProductControllerTest extends WebTestCase
 	{
 		// Create a new client to browse the application
 		$client = static::createClient();
-		$client->request('DELETE', '/products/20');
+		$client->request('DELETE', '/brands/20');
 
 		// Test if response is OK
 		$this->assertSame(404, $client->getResponse()->getStatusCode(),'Unexpected status code response');

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Tests\Controller;
 
-use AppBundle\DataFixtures\ORM\LoadProductData;
 use AppBundle\DataFixtures\ORM\LoadTestData;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
