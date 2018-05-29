@@ -1,7 +1,5 @@
-Recommerce Solution
+Symfony 3 REST API
 =====
-
-Recommerce Solution using Symfony 3
 
 Version
 ----
