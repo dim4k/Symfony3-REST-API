@@ -1,4 +1,4 @@
-Symfony 3 REST API
+Symfony 3 DEMO REST API
 =====
 
 Version
